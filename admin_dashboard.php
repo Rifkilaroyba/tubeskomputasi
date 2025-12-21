@@ -28,7 +28,7 @@ $income = $conn->query("SELECT SUM(total_amount) FROM orders WHERE status != 'Ca
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-2 sidebar p-3">
-                <h4 class="text-center mb-4"><i class="fas fa-utensils"></i> Admin Panel</h4>
+                <h4 class="text-center mb-4"><i class="fa-solid fa-gem me-3"></i>Admin Diamonds</h4>
                 <div class="nav flex-column nav-pills">
                     <a class="nav-link active" href="admin_dashboard.php"><i class="fas fa-home me-2"></i> Dashboard</a>
                     <a class="nav-link" href="admin_menu.php"><i class="fa-solid fa-gem fa- me-1"></i></i> Kelola Diamond</a>
