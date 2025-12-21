@@ -2,7 +2,7 @@
 session_start();
 
 $host = 'localhost';
-$dbname = 'food_ordering';
+$dbname = 'cloudcomputing';
 $username = 'root';
 $password = '';
 

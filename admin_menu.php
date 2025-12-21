@@ -117,10 +117,10 @@ $categories = $conn->query("SELECT * FROM categories");
                         <thead class="table-light">
                             <tr>
                                 <th class="ps-4">Gambar</th>
-                                <th>Nama Makanan</th>
+                                <th>Pilihan Diamond</th>
                                 <th>Kategori</th>
                                 <th>Harga</th>
-                                <th>Deskripsi</th>
+                                <th>Diskon</th>
                                 <th class="text-end pe-4">Aksi</th>
                             </tr>
                         </thead>

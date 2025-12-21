@@ -55,7 +55,7 @@ $orders = $conn->query("SELECT o.*, u.full_name FROM orders o JOIN users u ON o.
                         <tr>
                             <th>ID</th>
                             <th>Pelanggan</th>
-                            <th style="width: 30%;">Menu Dipesan</th>
+                            <th style="width: 30%;">Diamond Pesanan</th>
                             <th>Total & Metode</th>
                             <th>Status Pesanan</th>
                         </tr>

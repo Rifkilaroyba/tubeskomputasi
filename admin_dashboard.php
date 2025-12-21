@@ -31,8 +31,8 @@ $income = $conn->query("SELECT SUM(total_amount) FROM orders WHERE status != 'Ca
                 <h4 class="text-center mb-4"><i class="fas fa-utensils"></i> Admin Panel</h4>
                 <div class="nav flex-column nav-pills">
                     <a class="nav-link active" href="admin_dashboard.php"><i class="fas fa-home me-2"></i> Dashboard</a>
-                    <a class="nav-link" href="admin_menu.php"><i class="fas fa-hamburger me-2"></i> Kelola Menu</a>
-                    <a class="nav-link" href="admin_orders.php"><i class="fas fa-list-alt me-2"></i> Data Pesanan</a>
+                    <a class="nav-link" href="admin_menu.php"><i class="fa-solid fa-gem fa- me-1"></i></i> Kelola Diamond</a>
+                    <a class="nav-link" href="admin_orders.php"><i class="fas fa-list-alt me-2"></i> Data Pesanan Diamond</a>
                     <a class="nav-link mt-5 text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
                 </div>
             </div>
