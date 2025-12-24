@@ -77,9 +77,9 @@ if (isset($_POST['process_payment'])) {
             ],
             'customer_details' => [
                 'first_name' => 'User-' . $_SESSION['user_id']
-            ],
-            'enabled_payments' => ['bank_transfer']
+            ]
         ];
+
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 
@@ -87,26 +87,23 @@ if (isset($_POST['process_payment'])) {
         $stmt->execute([$snapToken, $order_id]);
 
         unset($_SESSION['cart']);
-        ?>
+?>
         <script src="https://app.sandbox.midtrans.com/snap/snap.js"
-                data-client-key="<?= MIDTRANS_CLIENT_KEY ?>"></script>
+            data-client-key="<?= MIDTRANS_CLIENT_KEY ?>"></script>
         <script>
             snap.pay("<?= $snapToken ?>", {
-                onSuccess: function () {
+                onSuccess: function() {
                     window.location = "success.php?order_id=<?= $order_id ?>";
                 },
-                onPending: function () {
+                onPending: function() {
                     window.location = "success.php?order_id=<?= $order_id ?>";
                 },
-                onError: function () {
+                onError: function() {
                     alert("Pembayaran gagal");
-                },
-                onClose: function () {
-                    window.location = "success.php?order_id=<?= $order_id ?>";
                 }
             });
         </script>
-        <?php
+<?php
         exit();
     }
 }
@@ -114,6 +111,7 @@ if (isset($_POST['process_payment'])) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Pembayaran</title>
@@ -164,12 +162,12 @@ if (isset($_POST['process_payment'])) {
             opacity: 0;
         }
 
-        .payment-option input:checked + .check {
+        .payment-option input:checked+.check {
             opacity: 1;
         }
 
-        .payment-option input:checked ~ .payment-icon,
-        .payment-option input:checked ~ h4 {
+        .payment-option input:checked~.payment-icon,
+        .payment-option input:checked~h4 {
             color: #198754;
         }
 
@@ -183,99 +181,100 @@ if (isset($_POST['process_payment'])) {
 
 <body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="payment-card p-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="payment-card p-5">
 
-                <h2 class="text-center mb-4">
-                    <i class="fas fa-gem"></i> Konfirmasi Top Up Diamond
-                </h2>
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-gem"></i> Konfirmasi Top Up Diamond
+                    </h2>
 
-                <form method="POST">
+                    <form method="POST">
 
-                    <div class="card mb-4">
-                        <div class="card-header fw-bold">
-                            <i class="fa-solid fa-gamepad"></i> Data Akun Mobile Legends
-                        </div>
-                        <div class="card-body">
-                            <input type="text" name="ml_user_id" class="form-control mb-3" placeholder="User ID" required>
-                            <input type="text" name="ml_server" class="form-control" placeholder="Server" required>
-                        </div>
-                    </div>
-
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <?php foreach ($_SESSION['cart'] as $menu_id => $qty):
-                                $stmt = $conn->prepare("SELECT * FROM menu WHERE id=?");
-                                $stmt->execute([$menu_id]);
-                                $item = $stmt->fetch();
-                            ?>
-                                <div class="d-flex justify-content-between">
-                                    <span><?= $item['name'] ?> (<?= $qty ?>x)</span>
-                                    <span>Rp <?= number_format($item['price'] * $qty, 0, ',', '.') ?></span>
-                                </div>
-                            <?php endforeach; ?>
-                            <hr>
-                            <h5 class="d-flex justify-content-between">
-                                <span>Total:</span>
-                                <span class="text-success">Rp <?= number_format($total, 0, ',', '.') ?></span>
-                            </h5>
-                        </div>
-                    </div>
-
-                    <!-- PAYMENT METHOD -->
-                    <div class="row g-4 mt-3">
-
-                        <div class="col-md-4">
-                            <label class="payment-option w-100">
-                                <input type="radio" name="payment_method" value="Cash" required>
-                                <span class="check"><i class="fas fa-check-circle"></i></span>
-                                <div class="payment-icon text-success">
-                                    <i class="fas fa-money-bill-wave"></i>
-                                </div>
-                                <h4>Cash</h4>
-                                <small class="text-muted">Bayar langsung</small>
-                            </label>
+                        <div class="card mb-4">
+                            <div class="card-header fw-bold">
+                                <i class="fa-solid fa-gamepad"></i> Data Akun Mobile Legends
+                            </div>
+                            <div class="card-body">
+                                <input type="text" name="ml_user_id" class="form-control mb-3" placeholder="User ID" required>
+                                <input type="text" name="ml_server" class="form-control" placeholder="Server" required>
+                            </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label class="payment-option w-100">
-                                <input type="radio" name="payment_method" value="VA" required>
-                                <span class="check"><i class="fas fa-check-circle"></i></span>
-                                <div class="payment-icon text-primary">
-                                    <i class="fas fa-university"></i>
-                                </div>
-                                <h4>Virtual Account</h4>
-                                <small class="text-muted">Transfer Bank</small>
-                            </label>
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <?php foreach ($_SESSION['cart'] as $menu_id => $qty):
+                                    $stmt = $conn->prepare("SELECT * FROM menu WHERE id=?");
+                                    $stmt->execute([$menu_id]);
+                                    $item = $stmt->fetch();
+                                ?>
+                                    <div class="d-flex justify-content-between">
+                                        <span><?= $item['name'] ?> (<?= $qty ?>x)</span>
+                                        <span>Rp <?= number_format($item['price'] * $qty, 0, ',', '.') ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                                <hr>
+                                <h5 class="d-flex justify-content-between">
+                                    <span>Total:</span>
+                                    <span class="text-success">Rp <?= number_format($total, 0, ',', '.') ?></span>
+                                </h5>
+                            </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <label class="payment-option w-100">
-                                <input type="radio" name="payment_method" value="QRIS" required>
-                                <span class="check"><i class="fas fa-check-circle"></i></span>
-                                <div class="payment-icon text-primary">
-                                    <i class="fas fa-qrcode"></i>
-                                </div>
-                                <h4>QRIS</h4>
-                                <small class="text-muted">Scan QR</small>
-                            </label>
+                        <!-- PAYMENT METHOD -->
+                        <div class="row g-4 mt-3">
+
+                            <div class="col-md-4">
+                                <label class="payment-option w-100">
+                                    <input type="radio" name="payment_method" value="Cash" required>
+                                    <span class="check"><i class="fas fa-check-circle"></i></span>
+                                    <div class="payment-icon text-success">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <h4>Cash</h4>
+                                    <small class="text-muted">Bayar langsung</small>
+                                </label>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="payment-option w-100">
+                                    <input type="radio" name="payment_method" value="VA" required>
+                                    <span class="check"><i class="fas fa-check-circle"></i></span>
+                                    <div class="payment-icon text-primary">
+                                        <i class="fas fa-university"></i>
+                                    </div>
+                                    <h4>Virtual Account</h4>
+                                    <small class="text-muted">Transfer Bank</small>
+                                </label>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="payment-option w-100">
+                                    <input type="radio" name="payment_method" value="QRIS" required>
+                                    <span class="check"><i class="fas fa-check-circle"></i></span>
+                                    <div class="payment-icon text-primary">
+                                        <i class="fas fa-qrcode"></i>
+                                    </div>
+                                    <h4>QRIS</h4>
+                                    <small class="text-muted">Scan QR</small>
+                                </label>
+                            </div>
+
                         </div>
 
-                    </div>
-
-                    <button type="submit" name="process_payment"
+                        <button type="submit" name="process_payment"
                             class="btn btn-success btn-lg w-100 mt-4">
-                        <i class="fas fa-check-circle"></i> Proses Pembayaran
-                    </button>
+                            <i class="fas fa-check-circle"></i> Proses Pembayaran
+                        </button>
 
-                </form>
+                    </form>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </body>
+
 </html>
