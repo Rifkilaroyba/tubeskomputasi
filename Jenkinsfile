@@ -18,16 +18,16 @@ pipeline {
         stage('Environment Check') {
             steps {
                 echo 'Checking Jenkins environment (Windows)'
-                bat 'echo OS=%OS%'
-                bat 'where php || echo PHP not found'
-                bat 'where composer || echo Composer not found'
+                sh 'echo OS=%OS%'
+                sh 'where php || echo PHP not found'
+                sh 'where composer || echo Composer not found'
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 echo 'Installing dependencies (if composer available)'
-                bat '''
+                sh '''
                 if exist composer.json (
                     composer install --no-interaction --prefer-dist || echo Composer install skipped
                 ) else (
@@ -40,7 +40,7 @@ pipeline {
         stage('Project Structure Check') {
             steps {
                 echo 'Listing project files'
-                bat 'dir'
+                sh 'dir'
             }
         }
 
