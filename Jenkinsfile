@@ -1,65 +1,51 @@
-pipeline {
-    agent any
+pipeline
+  stages {
 
-    options {
-        timestamps()
-        skipDefaultCheckout(true)
+    stage('Checkout') {
+      steps {
+        echo 'Checkout source code...'
+        checkout scm
+      }
     }
 
-    stages {
-
-        stage('Checkout SCM') {
-            steps {
-                echo 'Checkout source code from GitHub'
-                checkout scm
-            }
-        }
-
-        stage('Environment Check') {
-            steps {
-                echo 'Checking Jenkins environment (Windows)'
-                sh 'echo OS=%OS%'
-                sh 'where php || echo PHP not found'
-                sh 'where composer || echo Composer not found'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                echo 'Installing dependencies (if composer available)'
-                sh '''
-                if exist composer.json (
-                    composer install --no-interaction --prefer-dist || echo Composer install skipped
-                ) else (
-                    echo No composer.json found
-                )
-                '''
-            }
-        }
-
-        stage('Project Structure Check') {
-            steps {
-                echo 'Listing project files'
-                sh 'dir'
-            }
-        }
-
-        stage('Build Result') {
-            steps {
-                echo 'Pipeline executed successfully'
-            }
-        }
+    stage('Build') {
+      steps {
+        bat 'echo "Mulai build aplikasi (Windows)"'
+      }
     }
 
-    post {
-        success {
-            echo 'PIPELINE STATUS: SUCCESS'
+    stage('Build Docker Image') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+          bat """
+            echo Login Docker sebelum build...
+            docker login -u %USER% -p %PASS%
+            docker build -t ${env.IMAGE_NAME}:${env.BUILD_NUMBER} .
+            docker logout
+          """
         }
-        failure {
-            echo 'PIPELINE STATUS: FAILED'
-        }
-        always {
-            echo 'Pipeline finished (Windows Jenkins)'
-        }
+      }
     }
+
+    stage('Push Docker Image') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+          bat """
+            echo Login Docker untuk push...
+            docker login -u %USER% -p %PASS%
+            docker push ${env.IMAGE_NAME}:${env.BUILD_NUMBER}
+            docker tag ${env.IMAGE_NAME}:${env.BUILD_NUMBER} ${env.IMAGE_NAME}:latest
+            docker push ${env.IMAGE_NAME}:latest
+            docker logout
+          """
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      echo 'Selesai build pipeline.'
+    }
+  }
 }
