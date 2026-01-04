@@ -1,84 +1,38 @@
 pipeline {
     agent any
 
-    options {
-        timestamps()
-        skipDefaultCheckout(true)
-    }
-
     stages {
 
-        stage('Checkout SCM') {
+        stage('Environment Info') {
             steps {
-                echo 'Checkout source code from GitHub'
-                checkout scm
+                echo "Node: ${env.NODE_NAME}"
+                echo "Workspace: ${env.WORKSPACE}"
+                echo "OS: ${env.OS}"
             }
         }
 
-        stage('Check Project Structure') {
+        stage('Simple Command Test') {
             steps {
-                echo 'Listing project files'
-                bat 'dir'
+                bat 'echo HELLO FROM JENKINS'
             }
         }
 
-        stage('Check PHP & Composer') {
+        stage('List Files') {
             steps {
-                echo 'Checking tools availability (non-fatal)'
-                bat '''
-                where php >nul 2>nul && echo PHP available || echo PHP NOT available
-                where composer >nul 2>nul && echo Composer available || echo Composer NOT available
-                exit /b 0
-                '''
+                bat 'dir || exit /b 0'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Finish') {
             steps {
-                echo 'Composer install (safe execution)'
-                bat '''
-                if exist composer.json (
-                    where composer >nul 2>nul && (
-                        composer install --no-interaction --prefer-dist
-                    ) || (
-                        echo Composer not available, skipping install
-                    )
-                ) else (
-                    echo composer.json not found
-                )
-                exit /b 0
-                '''
-            }
-        }
-
-        stage('Basic PHP Check') {
-            steps {
-                echo 'Basic PHP syntax check (safe)'
-                bat '''
-                if exist index.php (
-                    where php >nul 2>nul && (
-                        php -l index.php
-                    ) || (
-                        echo PHP not available, skipping lint
-                    )
-                ) else (
-                    echo index.php not found
-                )
-                exit /b 0
-                '''
-            }
-        }
-
-        stage('Build Summary') {
-            steps {
-                echo 'BUILD COMPLETED SUCCESSFULLY'
+                echo 'Pipeline finished safely'
             }
         }
     }
 
     post {
         always {
-            echo 'PIPELINE FINISHED (NO FATAL ERRORS)'
+            echo 'DONE'
         }
     }
 }
