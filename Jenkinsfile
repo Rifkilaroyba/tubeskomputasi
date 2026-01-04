@@ -4,20 +4,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checkout source code berhasil'
+                echo 'Checkout source code'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'php -v'
-                sh 'composer install'
+                bat 'php -v'
+                bat 'composer install --no-interaction --prefer-dist'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Tahap test (belum ada unit test)'
+                echo 'No automated tests yet'
             }
         }
     }
