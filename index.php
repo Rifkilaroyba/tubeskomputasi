@@ -1,6 +1,7 @@
 <?php require_once 'config.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,18 +15,21 @@
             display: flex;
             align-items: center;
         }
+
         .login-card {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
+
         .login-header {
             background: linear-gradient(135deg, #1cef6dff 0%, #00cec4ff 100%);
             color: white;
             padding: 40px;
             text-align: center;
         }
+
         .btn-login {
             background: linear-gradient(135deg, #45e618ff 0%, #8fd29bff 100%);
             border: none;
@@ -34,6 +38,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="row justify-content-center">
@@ -45,25 +50,25 @@
                     </div>
                     <div class="p-5">
                         <?php
-                        if(isset($_POST['login'])) {
+                        if (isset($_POST['login'])) {
                             $username = $_POST['username'];
                             $password = $_POST['password'];
-                            
+
                             $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
                             $stmt->execute([$username]);
                             $user = $stmt->fetch();
-                            
+
                             // LOGIKA LOGIN (USER & ADMIN)
-                            if($user && password_verify($password, $user['password'])) {
+                            if ($user && password_verify($password, $user['password'])) {
                                 $_SESSION['user_id'] = $user['id'];
                                 $_SESSION['username'] = $user['username'];
                                 $_SESSION['full_name'] = $user['full_name'];
-                                
+
                                 // Cek apakah kolom role ada (untuk handle error jika database belum diupdate)
                                 $role = isset($user['role']) ? $user['role'] : 'customer';
                                 $_SESSION['role'] = $role;
-                                
-                                if($role == 'admin') {
+
+                                if ($role == 'admin') {
                                     header('Location: admin_dashboard.php');
                                 } else {
                                     header('Location: dashboard.php');
@@ -89,6 +94,10 @@
                         </form>
                         <div class="text-center mt-3">
                             <a href="register.php">Belum punya akun? Registrasi</a>
+                            <!-- <a href="google_login.php" style="padding:9px 12px; background:with; color:blue; text-decoration:none; border-radius:20%;">
+                                Login dengan Google
+                            </a> -->
+
                         </div>
                     </div>
                 </div>
@@ -96,4 +105,5 @@
         </div>
     </div>
 </body>
+
 </html>
