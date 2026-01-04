@@ -4,19 +4,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Source code checked out'
+                echo 'Checkout source code berhasil'
             }
         }
 
-        stage('Build') {
+        stage('Install Dependencies') {
             steps {
-                echo 'Build step running'
+                sh 'php -v'
+                sh 'composer install'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Test step running'
+                echo 'Tahap test (belum ada unit test)'
             }
         }
     }
