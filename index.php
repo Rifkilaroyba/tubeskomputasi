@@ -93,10 +93,10 @@
                             </button>
                         </form>
                         <div class="text-center mt-3">
-                            <a href="register.php">Belum punya akun? Registrasi</a>
-                            <!-- <a href="google_login.php" style="padding:9px 12px; background:with; color:blue; text-decoration:none; border-radius:20%;">
+                            <a href="register.php" style="padding:9px 12px; background:with; color:blue; text-decoration:none; border-radius:20%;">Belum punya akun? Registrasi </a>
+                            <a href="google_login.php" style="padding:9px 12px; background:with; color:blue; text-decoration:none; border-radius:20%;">
                                 Login dengan Google
-                            </a> -->
+                            </a>
 
                         </div>
                     </div>
