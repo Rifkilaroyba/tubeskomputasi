@@ -1,20 +1,18 @@
 <?php
 session_start();
 
-$host = "mysql-tubeskomputasi.mysql.database.azure.com";
-$dbname = "cloudcomputing";
-$username = "adminmysql@mysql-tubeskomputasi";
-$password = "PASSWORD_MYSQL_AZURE";
-$port = 3306;
+$host = 'mysql-tubeskomputasi.mysql.database.azure.com';
+$dbname = 'cloudcomputing';
+$username = 'adminuser@mysql-tubeskomputasi';
+$password = 'PASSWORD_MYSQL_AZURE';
 
 try {
     $conn = new PDO(
-        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
+        "mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
         [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::MYSQL_ATTR_SSL_CA => false
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         ]
     );
 } catch (PDOException $e) {
