@@ -1,14 +1,15 @@
 <?php
 session_start();
 
-$host = 'mysql-tubeskomputasi.mysql.database.azure.com';
-$dbname = 'cloudcomputing';
-$username = 'adminuser@mysql-tubeskomputasi';
-$password = 'PASSWORD_MYSQL_AZURE';
+$host = getenv('DB_HOST');
+$dbname = getenv('DB_NAME');
+$username = getenv('DB_USER');
+$password = getenv('DB_PASS');
+$port = getenv('DB_PORT');
 
 try {
     $conn = new PDO(
-        "mysql:host=$host;port=3306;dbname=$dbname;charset=utf8mb4",
+        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
         [
