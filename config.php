@@ -1,30 +1,22 @@
 <?php
 session_start();
 
-$host = 'localhost';
-$dbname = 'cloudcomputing';
-$username = 'root';
-$password = '';
+$host = "mysql-tubeskomputasi.mysql.database.azure.com";
+$dbname = "cloudcomputing";
+$username = "adminmysql@mysql-tubeskomputasi";
+$password = "PASSWORD_MYSQL_AZURE";
+$port = 3306;
 
 try {
     $conn = new PDO(
-        "mysql:host=$host;dbname=$dbname;charset=utf8",
+        "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8",
         $username,
         $password,
         [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::MYSQL_ATTR_SSL_CA => false
         ]
     );
 } catch (PDOException $e) {
     die("Koneksi Gagal: " . $e->getMessage());
 }
-
-require_once __DIR__ . '/vendor/autoload.php';
-
-/* GOOGLE CLIENT (FULL CLASS NAME) */
-// $googleClient = new \Google\Client();
-// $googleClient->setClientId("ISI_CLIENT_ID");
-// $googleClient->setClientSecret("ISI_CLIENT_SECRET");
-// $googleClient->setRedirectUri("http://localhost/cece/google_callback.php");
-// $googleClient->addScope("email");
-// $googleClient->addScope("profile");
