@@ -7,14 +7,17 @@ $username = getenv('DB_USER');
 $password = getenv('DB_PASS');
 $port = getenv('DB_PORT');
 
+$options = [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
+];
+
 try {
     $conn = new PDO(
         "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4",
         $username,
         $password,
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]
+        $options
     );
 } catch (PDOException $e) {
     die("Koneksi Gagal: " . $e->getMessage());
