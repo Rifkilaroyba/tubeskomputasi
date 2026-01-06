@@ -3,32 +3,76 @@ session_start();
 
 /*
 |--------------------------------------------------------------------------
-| DATABASE CONFIG (AZURE MYSQL)
+| AUTO DETECT ENVIRONMENT
 |--------------------------------------------------------------------------
-| Semua nilai diambil dari Application Settings Azure
-| Jangan pakai localhost / root di cloud
+| Kalau ada DB_HOST dari Azure → pakai Azure
+| Kalau tidak → pakai Localhost
 */
+$isAzure = getenv('DB_HOST') !== false;
 
-$host     = getenv('DB_HOST');   // mysql-xxxxx.mysql.database.azure.com
-$dbname   = getenv('DB_NAME');   // cloudcomputing
-$username = getenv('DB_USER');   // adminuser@mysql-xxxxx
-$password = getenv('DB_PASS');   // password mysql
+/*
+|--------------------------------------------------------------------------
+| DATABASE CONFIG
+|--------------------------------------------------------------------------
+*/
+if ($isAzure) {
+    // ===== AZURE MYSQL =====
+    $host     = getenv('DB_HOST');
+    $dbname   = getenv('DB_NAME');
+    $username = getenv('DB_USER');
+    $password = getenv('DB_PASS');
+    $port     = getenv('DB_PORT') ?: 3306;
 
-try {
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4;sslmode=require";
+    $ssl_ca = __DIR__ . "/BaltimoreCyberTrustRoot.crt.pem";
 
-    $conn = new PDO($dsn, $username, $password, [
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4;sslmode=verify_ca";
+
+    $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::MYSQL_ATTR_SSL_CA => $ssl_ca,
         PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
-    ]);
+    ];
 
+} else {
+    // ===== LOCALHOST (XAMPP) =====
+    $host     = 'localhost';
+    $dbname   = 'cloudcomputing';
+    $username = 'root';
+    $password = '';
+
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
+
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ];
+}
+
+/*
+|--------------------------------------------------------------------------
+| CONNECT DATABASE
+|--------------------------------------------------------------------------
+*/
+try {
+    $conn = new PDO($dsn, $username, $password, $options);
 } catch (PDOException $e) {
     die("Koneksi Gagal: " . $e->getMessage());
 }
 
 /*
 |--------------------------------------------------------------------------
-| AUTOLOAD (COMPOSER)
+| COMPOSER AUTOLOAD
 |--------------------------------------------------------------------------
 */
 require_once __DIR__ . '/vendor/autoload.php';
+
+/*
+|--------------------------------------------------------------------------
+| GOOGLE CLIENT (OPTIONAL)
+|--------------------------------------------------------------------------
+*/
+// $googleClient = new \Google\Client();
+// $googleClient->setClientId("ISI_CLIENT_ID");
+// $googleClient->setClientSecret("ISI_CLIENT_SECRET");
+// $googleClient->setRedirectUri("http://localhost/cece/google_callback.php");
+// $googleClient->addScope("email");
+// $googleClient->addScope("profile");
