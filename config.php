@@ -2,37 +2,24 @@
 session_start();
 
 /* =======================
-   AUTO DETECT AZURE / LOCAL
+   DATABASE CONFIG
 ======================= */
-if (getenv('DB_HOST')) {
-    // AZURE
-    $host     = getenv('DB_HOST');
-    $dbname   = getenv('DB_NAME');
-    $username = getenv('DB_USER');
-    $password = getenv('DB_PASS');
 
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4;sslmode=require";
-
-    $options = [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
-    ];
-} else {
-    // LOCAL
-    $host = 'localhost';
-    $dbname = 'cloudcomputing';
-    $username = 'root';
-    $password = '';
-
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
-
-    $options = [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ];
-}
+$host     = getenv('DB_HOST');      // contoh: mysql-tubeskomputasi.mysql.database.azure.com
+$dbname   = getenv('DB_NAME');      // cloudcomputing
+$username = getenv('DB_USER');      // adminuser@mysql-tubeskomputasi
+$password = getenv('DB_PASS');      // password mysql
 
 try {
-    $conn = new PDO($dsn, $username, $password, $options);
+    $conn = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8mb4;sslmode=require",
+        $username,
+        $password,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false
+        ]
+    );
 } catch (PDOException $e) {
     die("Koneksi Gagal: " . $e->getMessage());
 }
